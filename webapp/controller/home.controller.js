@@ -2,13 +2,23 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
-    "sap/ui/core/Core" // <-- Inyectamos el Core de forma segura
-], function (Controller, JSONModel, MessageToast, Core) {
+    "sap/ui/core/Core",
+    "sap/ui/model/Filter",
+    "sap/ui/model/FilterOperator",
+    "sap/m/Popover",
+    "sap/m/VBox",
+    "sap/m/Avatar",
+    "sap/m/Text",
+    "sap/m/List",
+    "sap/m/StandardListItem",
+    "sap/m/Button",
+    "sap/m/PlacementType"
+], function (Controller, JSONModel, MessageToast, Core, Filter, FilterOperator, Popover, VBox, Avatar, Text, List, StandardListItem, Button, PlacementType) {
     "use strict";
 
     return Controller.extend("pantallahome.controller.home", {
         onInit: function () {
-            // Modelo de datos con tus dominios, cantidades e íconos SAP
+            // 1. Modelo de Dominios
             var oData = {
                 Tiles: [
                     { title: "Seguridad e Integraciones", count: 8, icon: "sap-icon://shield" },
@@ -25,34 +35,129 @@ sap.ui.define([
                     { title: "Reportes", count: 9, icon: "sap-icon://document-text" }
                 ]
             };
+            this.getView().setModel(new JSONModel(oData), "domainModel");
 
-            // Asignamos el modelo a la vista
-            var oModel = new JSONModel(oData);
-            this.getView().setModel(oModel, "domainModel");
+            // 2. Modelo de Usuario (Variables dinámicas listas para ser mapeadas a futuro)
+            var oUserData = {
+                name: "Facundo Dimarco Bravo",
+                email: "facundo.dimarco@qactionsystem.com"
+            };
+            this.getView().setModel(new JSONModel(oUserData), "userModel");
         },
 
-        // Función corregida usando la API modular del Core
+        // Buscador
+        onSearch: function (oEvent) {
+            var sQuery = oEvent.getParameter("newValue");
+            var aFilters = [];
+            if (sQuery && sQuery.length > 0) {
+                aFilters.push(new Filter("title", FilterOperator.Contains, sQuery));
+            }
+            this.byId("tilesGrid").getBinding("content").filter(aFilters);
+        },
+
+        // Modo Oscuro
         onToggleDarkMode: function () {
             var sCurrentTheme = Core.getConfiguration().getTheme();
-            var oButton = this.byId("themeButton");
-
             if (sCurrentTheme.includes("dark")) {
                 Core.applyTheme("sap_horizon");
-                oButton.setIcon("sap-icon://night-mode");
                 MessageToast.show("Modo Claro activado");
             } else {
                 Core.applyTheme("sap_horizon_dark");
-                oButton.setIcon("sap-icon://light-mode");
                 MessageToast.show("Modo Oscuro activado");
             }
         },
 
-        // Evento al clickear un tile
+        // Menú Desplegable del Usuario (Popover)
+        onAvatarPress: function (oEvent) {
+            var oSource = oEvent.getSource();
+
+            if (!this._oUserPopover) {
+                // Creamos el contenedor del Popover con la estructura de la imagen
+                var oPopoverContent = new VBox({
+                    alignItems: "Center",
+                    width: "280px",
+                    class: "sapUiContentPadding"
+                });
+
+                // Avatar vacío del menú interno
+                var oMenuAvatar = new Avatar({
+                    icon: "sap-icon://customer",
+                    displaySize: "M",
+                    class: "sapUiSmallMarginBottom"
+                });
+
+                // Nombre en negrita dinámico vinculado al id de variable
+                var oNameText = new Text({
+                    text: "{userModel>/name}",
+                    class: "sapUiTinyMarginBottom"
+                }).addStyleClass("sapUiSelectable").addStyleClass("sapMTitle"); // Truco para darle peso visual de título
+
+                // Mail dinámico vinculado al id de variable
+                var oEmailText = new Text({
+                    text: "{userModel>/email}",
+                    class: "sapUiSmallMarginBottom"
+                });
+
+                // Lista de acciones (Settings únicamente)
+                var oActionList = new List({
+                    showSeparators: "None",
+                    items: [
+                        new StandardListItem({
+                            title: "Settings",
+                            icon: "sap-icon://action-settings",
+                            type: "Active",
+                            press: function () {
+                                MessageToast.show("Abriendo configuración...");
+                            }
+                        })
+                    ]
+                });
+
+                // Botón Sign Out al fondo a la derecha
+                var oSignOutBox = new VBox({
+                    width: "100%",
+                    alignItems: "End",
+                    class: "sapUiSmallMarginTop"
+                });
+                var oSignOutButton = new Button({
+                    text: "Sign Out",
+                    icon: "sap-icon://log",
+                    type: "Transparent",
+                    press: function () {
+                        MessageToast.show("Cerrando sesión...");
+                    }
+                });
+                oSignOutBox.addItem(oSignOutButton);
+
+                // Armamos el árbol de elementos
+                oPopoverContent.addItem(oMenuAvatar);
+                oPopoverContent.addItem(oNameText);
+                oPopoverContent.addItem(oEmailText);
+                oPopoverContent.addItem(oActionList);
+                oPopoverContent.addItem(oSignOutBox);
+
+                // Instanciamos el Popover contenedor
+                this._oUserPopover = new Popover({
+                    showHeader: false,
+                    placement: PlacementType.Bottom,
+                    content: [oPopoverContent]
+                });
+
+                // Le asignamos el modelo para que lea las variables
+                this.getView().addDependent(this._oUserPopover);
+            }
+
+            // Abre o cierra si ya estaba abierto
+            if (this._oUserPopover.isOpen()) {
+                this._oUserPopover.close();
+            } else {
+                this._oUserPopover.openBy(oSource);
+            }
+        },
+
         onTilePress: function (oEvent) {
             var oContext = oEvent.getSource().getBindingContext("domainModel");
-            var sTitle = oContext.getProperty("title");
-            
-            MessageToast.show("Abriendo módulo: " + sTitle);
+            MessageToast.show("Abriendo módulo: " + oContext.getProperty("title"));
         }
     });
 });

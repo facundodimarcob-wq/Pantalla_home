@@ -1,1 +1,12 @@
-/* Enter your custom styles here */
+/* Contenedor centralizado estilo Work Zone */
+.workzone-container {
+    width: 100% !important;
+    max-width: 1300px !important;
+    margin: 0 auto !important;
+}
+
+/* Forzar que el Toolbar use fondo transparente dentro del layout */
+.transparent-toolbar {
+    background-color: transparent !important;
+    border-bottom: none !important;
+}

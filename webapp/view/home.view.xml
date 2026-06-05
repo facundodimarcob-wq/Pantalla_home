@@ -4,35 +4,55 @@
     xmlns="sap.m"
     xmlns:layout="sap.ui.layout">
     
-    <Page title="Home" showHeader="false" backgroundDesign="Transparent">
+    <Page id="pageHome" showHeader="false" backgroundDesign="Transparent">
         <content>
-            <OverflowToolbar style="Clear" class="sapUiSmallMarginTop sapUiSmallMarginBegin sapUiSmallMarginEnd">
-                <Title text="Grupo: Operaciones Centrales" level="H2" titleStyle="H3" />
-                <ToolbarSpacer />
-                <Button 
-                    id="themeButton"
-                    icon="sap-icon://night-mode" 
-                    tooltip="Cambiar Modo Oscuro/Claro"
-                    type="Transparent"
-                    press=".onToggleDarkMode" />
-            </OverflowToolbar>
+            
+            <VBox id="headerWrapper" class="workzone-container sapUiMediumMarginTop">
+                <Toolbar id="headerToolbar" design="Solid" height="3rem" class="sapUiNoMargin">
+                    <Title id="sapLogo" text="PANTU" titleStyle="H4" class="sapUiSmallMarginBegin sapThemeBrand-asColor" />
+                    
+                    <ToolbarSpacer id="headerSpacer" />
+                    
+                    <SearchField 
+                        id="globalSearchField"
+                        width="250px" 
+                        placeholder="Search in: 'Apps'" 
+                        liveChange=".onSearch" 
+                        class="sapUiTinyMarginEnd" />
+                    
+                    <Button id="themeButton" icon="sap-icon://palette" type="Transparent" press=".onToggleDarkMode" tooltip="Cambiar Tema" />
+                    <Avatar id="userAvatar" icon="sap-icon://customer" displaySize="XS" active="true" press=".onAvatarPress" class="sapUiTinyMarginBegin sapUiSmallMarginEnd" />
+                </Toolbar>
+            </VBox>
 
-            <layout:Grid
-                defaultSpan="XL2 L3 M4 S6"
-                content="{domainModel>/Tiles}"
-                class="sapUiSmallMargin">
-                <GenericTile
-                    header="{domainModel>title}"
-                    subheader="Funcionalidades"
-                    press=".onTilePress">
-                    <TileContent>
-                        <NumericContent
-                            value="{domainModel>count}"
-                            icon="{domainModel>icon}" 
-                            valueColor="Neutral"/>
-                    </TileContent>
-                </GenericTile>
-            </layout:Grid>
+            <VBox id="mainLayoutVBox" class="workzone-container sapUiMediumMarginTop">
+                
+                <Title id="groupTitle" text="Operaciones Centrales" level="H3" titleStyle="H4" class="sapUiSmallMarginBottom sapUiSmallMarginBegin" />
+
+                <layout:Grid
+                    id="tilesGrid"
+                    defaultSpan="XL2 L2 M3 S6" 
+                    content="{domainModel>/Tiles}"
+                    hSpacing="0.5" 
+                    vSpacing="0.75"
+                    class="sapUiSmallMarginBeginEnd">
+                    
+                    <GenericTile
+                        id="domainTile"
+                        header="{domainModel>title}"
+                        subheader="Funcionalidades"
+                        press=".onTilePress">
+                        <TileContent id="domainTileContent">
+                            <NumericContent
+                                id="domainNumericContent"
+                                value="{domainModel>count}"
+                                icon="{domainModel>icon}" 
+                                valueColor="Neutral" />
+                        </TileContent>
+                    </GenericTile>
+                </layout:Grid>
+                
+            </VBox>
         </content>
     </Page>
 </mvc:View>
