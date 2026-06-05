@@ -1,0 +1,38 @@
+<mvc:View
+    controllerName="pantallahome.controller.home"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:layout="sap.ui.layout">
+    
+    <Page title="Home" showHeader="false" backgroundDesign="Transparent">
+        <content>
+            <OverflowToolbar style="Clear" class="sapUiSmallMarginTop sapUiSmallMarginBegin sapUiSmallMarginEnd">
+                <Title text="Grupo: Operaciones Centrales" level="H2" titleStyle="H3" />
+                <ToolbarSpacer />
+                <Button 
+                    id="themeButton"
+                    icon="sap-icon://night-mode" 
+                    tooltip="Cambiar Modo Oscuro/Claro"
+                    type="Transparent"
+                    press=".onToggleDarkMode" />
+            </OverflowToolbar>
+
+            <layout:Grid
+                defaultSpan="XL2 L3 M4 S6"
+                content="{domainModel>/Tiles}"
+                class="sapUiSmallMargin">
+                <GenericTile
+                    header="{domainModel>title}"
+                    subheader="Funcionalidades"
+                    press=".onTilePress">
+                    <TileContent>
+                        <NumericContent
+                            value="{domainModel>count}"
+                            icon="{domainModel>icon}" 
+                            valueColor="Neutral"/>
+                    </TileContent>
+                </GenericTile>
+            </layout:Grid>
+        </content>
+    </Page>
+</mvc:View>
