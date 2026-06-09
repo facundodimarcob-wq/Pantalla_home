@@ -4,55 +4,80 @@
     xmlns="sap.m"
     xmlns:layout="sap.ui.layout">
     
-    <Page id="pageHome" showHeader="false" backgroundDesign="Transparent">
+    <Page id="pageHome" showHeader="false" class="sapUiNoContentPadding">
         <content>
-            
-            <VBox id="headerWrapper" class="workzone-container sapUiMediumMarginTop">
-                <Toolbar id="headerToolbar" design="Solid" height="3rem" class="sapUiNoMargin">
-                    <Title id="sapLogo" text="PANTU" titleStyle="H4" class="sapUiSmallMarginBegin sapThemeBrand-asColor" />
+            <HBox id="mainAppHBox" width="100%" height="100%" class="app-main-layout">
+                
+                <VBox id="sidebarVBox" class="sidebar-container" width="320px">
+                    <Title id="sidebarLogo" text="QASystems" titleStyle="H2" class="pantu-logo sapUiMediumMarginBottom" />
                     
-                    <ToolbarSpacer id="headerSpacer" />
+                    <HBox id="userInfoHBox" alignItems="Center" class="sapUiSmallMarginBottom">
+                        <Avatar id="sideAvatar" src="sap-icon://customer" displaySize="M" class="sapUiSmallMarginEnd" backgroundColor="Accent6" />
+                        <VBox id="userNameVBox">
+                            <Text id="welcomeText" text="Bienvenido(a)" class="welcome-text" />
+                            <Title id="userNameTitle" text="{userModel>/name}" level="H5" titleStyle="H6" wrapping="true" />
+                        </VBox>
+                    </HBox>
                     
                     <SearchField 
                         id="globalSearchField"
-                        width="250px" 
-                        placeholder="Search in: 'Apps'" 
+                        width="100%" 
+                        placeholder="Buscar..." 
                         liveChange=".onSearch" 
-                        class="sapUiTinyMarginEnd" />
+                        class="sapUiSmallMarginBottom custom-search-field" />
                     
-                    <Button id="themeButton" icon="sap-icon://palette" type="Transparent" press=".onToggleDarkMode" tooltip="Cambiar Tema" />
-                    <Avatar id="userAvatar" icon="sap-icon://customer" displaySize="XS" active="true" press=".onAvatarPress" class="sapUiTinyMarginBegin sapUiSmallMarginEnd" />
-                </Toolbar>
-            </VBox>
+                    <List id="sidebarList" items="{sideMenu>/items}" class="sidebar-list" showSeparators="None">
+                        <StandardListItem 
+                            id="sidebarListItem"
+                            title="{sideMenu>title}" 
+                            icon="{sideMenu>icon}" 
+                            type="Navigation"
+                            class="{= ${sideMenu>active} ? 'active-menu-item' : '' }" />
+                    </List>
+                </VBox>
 
-            <VBox id="mainLayoutVBox" class="workzone-container sapUiMediumMarginTop">
-                
-                <Title id="groupTitle" text="Operaciones Centrales" level="H3" titleStyle="H4" class="sapUiSmallMarginBottom sapUiSmallMarginBegin" />
-
-                <layout:Grid
-                    id="tilesGrid"
-                    defaultSpan="XL2 L2 M3 S6" 
-                    content="{domainModel>/Tiles}"
-                    hSpacing="0.5" 
-                    vSpacing="0.75"
-                    class="sapUiSmallMarginBeginEnd">
+                <VBox id="mainContentVBox" class="main-content-container">
+                    <layoutData>
+                        <FlexItemData id="mainContentFlexData" growFactor="1" />
+                    </layoutData>
                     
-                    <GenericTile
-                        id="domainTile"
-                        header="{domainModel>title}"
-                        subheader="Funcionalidades"
-                        press=".onTilePress">
-                        <TileContent id="domainTileContent">
-                            <NumericContent
-                                id="domainNumericContent"
-                                value="{domainModel>count}"
-                                icon="{domainModel>icon}" 
-                                valueColor="Neutral" />
-                        </TileContent>
-                    </GenericTile>
-                </layout:Grid>
-                
-            </VBox>
+                    <Toolbar id="topToolbar" design="Transparent" class="top-quick-toolbar sapUiSmallMarginBottom">
+                        <ToolbarSpacer id="topToolbarSpacer" />
+                        <Button id="btnHome" icon="sap-icon://home" type="Transparent" tooltip="Inicio" />
+                        <Button id="btnNotifications" icon="sap-icon://bell" type="Transparent" tooltip="Notificaciones" />
+                        <Button id="themeButton" icon="sap-icon://palette" type="Transparent" press=".onToggleDarkMode" tooltip="Cambiar Tema" />
+                        <Button id="btnSession" icon="sap-icon://log" type="Transparent" press=".onAvatarPress" tooltip="Opciones de Sesión" />
+                    </Toolbar>
+
+                    <VBox id="workzoneContainer" class="workzone-container">
+                        <Title id="groupTitle" text="Operaciones Centrales" level="H2" titleStyle="H3" class="sapUiSmallMarginBottom sapUiTinyMarginBegin" />
+
+                        <FlexBox 
+                            id="tilesFlexBox"
+                            wrap="Wrap" 
+                            justifyContent="Start" 
+                            alignItems="Start" 
+                            items="{domainModel>/Tiles}">
+                            
+                            <GenericTile
+                                id="domainTile"
+                                header="{domainModel>title}"
+                                subheader="Funcionalidades"
+                                press=".onTilePress"
+                                class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
+                                <TileContent id="domainTileContent">
+                                    <NumericContent
+                                        id="domainNumericContent"
+                                        value="{domainModel>count}"
+                                        icon="{domainModel>icon}" 
+                                        valueColor="Neutral" />
+                                </TileContent>
+                            </GenericTile>
+                            
+                        </FlexBox>
+                    </VBox>
+                </VBox>
+            </HBox>
         </content>
     </Page>
 </mvc:View>

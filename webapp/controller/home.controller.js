@@ -18,7 +18,6 @@ sap.ui.define([
 
     return Controller.extend("pantallahome.controller.home", {
         onInit: function () {
-            // 1. Modelo de Dominios
             var oData = {
                 Tiles: [
                     { title: "Seguridad e Integraciones", count: 8, icon: "sap-icon://shield" },
@@ -37,25 +36,36 @@ sap.ui.define([
             };
             this.getView().setModel(new JSONModel(oData), "domainModel");
 
-            // 2. Modelo de Usuario (Variables dinámicas listas para ser mapeadas a futuro)
             var oUserData = {
                 name: "Facundo Dimarco Bravo",
                 email: "facundo.dimarco@qactionsystem.com"
             };
             this.getView().setModel(new JSONModel(oUserData), "userModel");
+
+            // MENÚ LATERAL ACTUALIZADO (Español y filtrado)
+            var oMenuData = {
+                items: [
+                    { title: "Ajustes", icon: "sap-icon://action-settings", active: true }, // Activo por defecto
+                    { title: "Suscripciones", icon: "sap-icon://money-bills", active: false },
+                    { title: "Agendas", icon: "sap-icon://calendar", active: false },
+                    { title: "Ayuda Online", icon: "sap-icon://sys-help", active: false }
+                ]
+            };
+            this.getView().setModel(new JSONModel(oMenuData), "sideMenu");
         },
 
-        // Buscador
+        
         onSearch: function (oEvent) {
             var sQuery = oEvent.getParameter("newValue");
             var aFilters = [];
             if (sQuery && sQuery.length > 0) {
+                // Filtra ignorando mayúsculas/minúsculas
                 aFilters.push(new Filter("title", FilterOperator.Contains, sQuery));
             }
-            this.byId("tilesGrid").getBinding("content").filter(aFilters);
+            // Actualizado para apuntar al FlexBox y a la propiedad "items"
+            this.byId("tilesFlexBox").getBinding("items").filter(aFilters);
         },
 
-        // Modo Oscuro
         onToggleDarkMode: function () {
             var sCurrentTheme = Core.getConfiguration().getTheme();
             if (sCurrentTheme.includes("dark")) {
@@ -67,92 +77,36 @@ sap.ui.define([
             }
         },
 
-        // Menú Desplegable del Usuario (Popover)
         onAvatarPress: function (oEvent) {
             var oSource = oEvent.getSource();
-
             if (!this._oUserPopover) {
-                // Creamos el contenedor del Popover con la estructura de la imagen
-                var oPopoverContent = new VBox({
-                    alignItems: "Center",
-                    width: "280px",
-                    class: "sapUiContentPadding"
-                });
-
-                // Avatar vacío del menú interno
-                var oMenuAvatar = new Avatar({
-                    icon: "sap-icon://customer",
-                    displaySize: "M",
-                    class: "sapUiSmallMarginBottom"
-                });
-
-                // Nombre en negrita dinámico vinculado al id de variable
-                var oNameText = new Text({
-                    text: "{userModel>/name}",
-                    class: "sapUiTinyMarginBottom"
-                }).addStyleClass("sapUiSelectable").addStyleClass("sapMTitle"); // Truco para darle peso visual de título
-
-                // Mail dinámico vinculado al id de variable
-                var oEmailText = new Text({
-                    text: "{userModel>/email}",
-                    class: "sapUiSmallMarginBottom"
-                });
-
-                // Lista de acciones (Settings únicamente)
+                var oPopoverContent = new VBox({ alignItems: "Center", width: "280px", class: "sapUiContentPadding" });
+                var oMenuAvatar = new Avatar({ icon: "sap-icon://customer", displaySize: "M", class: "sapUiSmallMarginBottom" });
+                var oNameText = new Text({ text: "{userModel>/name}", class: "sapUiTinyMarginBottom" }).addStyleClass("sapUiSelectable").addStyleClass("sapMTitle");
+                var oEmailText = new Text({ text: "{userModel>/email}", class: "sapUiSmallMarginBottom" });
+                
                 var oActionList = new List({
                     showSeparators: "None",
                     items: [
-                        new StandardListItem({
-                            title: "Settings",
-                            icon: "sap-icon://action-settings",
-                            type: "Active",
-                            press: function () {
-                                MessageToast.show("Abriendo configuración...");
-                            }
-                        })
+                        new StandardListItem({ title: "Settings", icon: "sap-icon://action-settings", type: "Active", press: function () { MessageToast.show("Abriendo configuración..."); }})
                     ]
                 });
 
-                // Botón Sign Out al fondo a la derecha
-                var oSignOutBox = new VBox({
-                    width: "100%",
-                    alignItems: "End",
-                    class: "sapUiSmallMarginTop"
-                });
-                var oSignOutButton = new Button({
-                    text: "Sign Out",
-                    icon: "sap-icon://log",
-                    type: "Transparent",
-                    press: function () {
-                        MessageToast.show("Cerrando sesión...");
-                    }
-                });
+                var oSignOutBox = new VBox({ width: "100%", alignItems: "End", class: "sapUiSmallMarginTop" });
+                var oSignOutButton = new Button({ text: "Sign Out", icon: "sap-icon://log", type: "Transparent", press: function () { MessageToast.show("Cerrando sesión..."); } });
                 oSignOutBox.addItem(oSignOutButton);
 
-                // Armamos el árbol de elementos
                 oPopoverContent.addItem(oMenuAvatar);
                 oPopoverContent.addItem(oNameText);
                 oPopoverContent.addItem(oEmailText);
                 oPopoverContent.addItem(oActionList);
                 oPopoverContent.addItem(oSignOutBox);
 
-                // Instanciamos el Popover contenedor
-                this._oUserPopover = new Popover({
-                    showHeader: false,
-                    placement: PlacementType.Bottom,
-                    content: [oPopoverContent]
-                });
-
-                // Le asignamos el modelo para que lea las variables
+                this._oUserPopover = new Popover({ showHeader: false, placement: PlacementType.Bottom, content: [oPopoverContent] });
                 this.getView().addDependent(this._oUserPopover);
             }
-
-            // Abre o cierra si ya estaba abierto
-            if (this._oUserPopover.isOpen()) {
-                this._oUserPopover.close();
-            } else {
-                this._oUserPopover.openBy(oSource);
-            }
+            if (this._oUserPopover.isOpen()) { this._oUserPopover.close(); } 
+            else { this._oUserPopover.openBy(oSource); }
         },
 
         onTilePress: function (oEvent) {
