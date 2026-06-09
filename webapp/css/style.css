@@ -2,37 +2,62 @@
 /* ESTRUCTURA PRINCIPAL HÍBRIDA (Soporta Modo Oscuro nativo) */
 /* ========================================================= */
 
-html {
-    font-size: 20px !important; /* Mantiene la proporción gigante estilo zoom */
-}
-
 html, body {
     height: 100%;
     margin: 0;
     overflow: hidden; 
 }
 
-.app-main-layout {
+/* Forzar al Launchpad nativo a ocupar 100% */
+.sapMShellAppWidthLimited .sapMShellCentralBox {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    left: 0 !important;
+}
+
+.root-container {
     height: 100vh;
+    width: 100vw;
+}
+
+/* --- NUEVA BARRA SUPERIOR (SHELL HEADER) --- */
+.custom-shell-header {
+    background-color: var(--sapShellColor, #354a5f) !important;
+    height: 3rem !important;
+    border-bottom: none !important;
+    box-shadow: inset 0 -1px 0 var(--sapShell_BorderColor, rgba(0,0,0,0.1));
+}
+
+.sap-his-text {
+    color: var(--sapShell_TextColor, #ffffff) !important;
+    font-family: "72", "72full", Arial, Helvetica, sans-serif; /* Tipografía oficial SAP Fiori/BTP */
+    font-size: 1.125rem;
+    font-weight: normal;
+    margin-left: 0.5rem;
+}
+
+/* Forzamos que los iconos superiores sean claros sobre el fondo oscuro */
+.shell-header-btn .sapUiIcon {
+    color: var(--sapShell_InteractiveTextColor, #ffffff) !important;
+}
+
+
+/* --- CONTENIDO PRINCIPAL --- */
+.app-main-layout {
     background-color: var(--sapBackgroundColor);
+    height: calc(100vh - 3rem); /* Restamos el header para un ajuste perfecto */
 }
 
 /* --- 1. SIDEBAR --- */
 .sidebar-container {
-    background-color: var(--sapBackgroundColor); /* Mutará en modo oscuro */
+    background-color: var(--sapBackgroundColor);
     border-right: 1px solid var(--sapPageHeader_BorderColor);
-    padding: 1.5rem 1rem;
+    padding: 1rem;
     height: 100%;
     overflow-y: auto;
     box-shadow: 2px 0 5px rgba(0,0,0,0.02);
     z-index: 2;
-}
-
-.pantu-logo {
-    color: var(--sapBrandColor) !important;
-    font-weight: bold;
-    font-size: 24px !important;
-    letter-spacing: 1px;
 }
 
 .welcome-text {
@@ -56,7 +81,6 @@ html, body {
     background-color: var(--sapList_Hover_Background) !important;
 }
 
-/* Ítem Activo (Color primario de SAP) */
 .active-menu-item {
     background-color: var(--sapSelectedColor) !important; 
 }
@@ -68,25 +92,20 @@ html, body {
     color: var(--sapActiveColor) !important; 
 }
 
-
 /* --- 2. ÁREA PRINCIPAL (MAIN CONTENT) --- */
 .main-content-container {
-    background-color: var(--sapBaseColor); /* Gris claro de fondo que se oscurece perfecto */
+    background-color: var(--sapBackgroundColor); 
     height: 100%;
     overflow-y: auto;
     padding: 1rem 2rem;
 }
 
-.top-quick-toolbar {
-    border-bottom: none !important;
-}
-
 .workzone-container {
     width: 100% !important;
-    max-width: 1300px !important;
-    margin: 0 auto !important;
-    background-color: var(--sapBackgroundColor); /* Fondo de la caja de las tarjetas */
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    max-width: none !important; 
+    margin: 0 !important; 
+    background-color: transparent !important; 
+    padding: 1rem 0 !important; 
+    border-radius: 0 !important; 
+    box-shadow: none !important; 
 }
