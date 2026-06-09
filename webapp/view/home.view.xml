@@ -6,23 +6,23 @@
     
     <Page id="pageHome" showHeader="false" class="sapUiNoContentPadding">
         <content>
-            <VBox height="100%" class="root-container">
+            <VBox id="rootVBox" height="100%" class="root-container">
                 
                 <Toolbar id="shellHeader" class="custom-shell-header">
-                    <Image src="https://upload.wikimedia.org/wikipedia/commons/5/59/SAP_2011_logo.svg" height="28px" class="sapUiTinyMarginBegin sapUiSmallMarginEnd" />
-                    <Text text="HIS" class="sap-his-text" />
+                    <Image id="sapLogoImage" src="https://upload.wikimedia.org/wikipedia/commons/5/59/SAP_2011_logo.svg" height="28px" class="sapUiTinyMarginBegin sapUiSmallMarginEnd" />
+                    <Text id="hisText" text="{i18n>shell.title}" class="sap-his-text" />
                     
-                    <ToolbarSpacer />
+                    <ToolbarSpacer id="headerSpacer" />
                     
-                    <Button id="btnHome" icon="sap-icon://home" type="Transparent" tooltip="Inicio" class="shell-header-btn" />
-                    <Button id="btnNotifications" icon="sap-icon://bell" type="Transparent" tooltip="Notificaciones" class="shell-header-btn" />
-                    <Button id="themeButton" icon="sap-icon://palette" type="Transparent" press=".onToggleDarkMode" tooltip="Cambiar Tema" class="shell-header-btn" />
-                    <Button id="btnSession" icon="sap-icon://log" type="Transparent" press=".onAvatarPress" tooltip="Opciones de Sesión" class="shell-header-btn" />
+                    <Button id="btnHome" icon="sap-icon://home" type="Transparent" tooltip="{i18n>tooltip.home}" class="shell-header-btn" />
+                    <Button id="btnNotifications" icon="sap-icon://bell" type="Transparent" tooltip="{i18n>tooltip.notifications}" class="shell-header-btn" />
+                    <Button id="themeButton" icon="sap-icon://palette" type="Transparent" press=".onThemeMenuPress" tooltip="{i18n>tooltip.theme}" class="shell-header-btn" />
+                    <Button id="btnSession" icon="sap-icon://log" type="Transparent" press=".onAvatarPress" tooltip="{i18n>tooltip.session}" class="shell-header-btn" />
                 </Toolbar>
 
                 <HBox id="mainAppHBox" width="100%" class="app-main-layout">
                     <layoutData>
-                        <FlexItemData growFactor="1" />
+                        <FlexItemData id="mainAppFlexData" growFactor="1" />
                     </layoutData>
                     
                     <VBox id="sidebarVBox" class="sidebar-container" width="280px">
@@ -33,7 +33,7 @@
                         <HBox id="userInfoHBox" alignItems="Center" width="100%" class="sapUiSmallMarginBottom sapUiSmallMarginTop">
                             <Avatar id="sideAvatar" src="sap-icon://customer" displaySize="S" class="sapUiSmallMarginEnd" backgroundColor="Accent6" />
                             <VBox id="userNameVBox" width="100%">
-                                <Text id="welcomeText" text="Bienvenido(a)" wrapping="false" class="welcome-text" />
+                                <Text id="welcomeText" text="{i18n>sidebar.welcome}" wrapping="false" class="welcome-text" />
                                 <Title id="userNameTitle" text="{userModel>/name}" level="H6" titleStyle="H6" wrapping="true" />
                             </VBox>
                         </HBox>
@@ -41,7 +41,7 @@
                         <SearchField 
                             id="globalSearchField"
                             width="100%" 
-                            placeholder="Buscar..." 
+                            placeholder="{i18n>sidebar.searchPlaceholder}" 
                             liveChange=".onSearch" 
                             class="sapUiSmallMarginBottom custom-search-field" />
                         
@@ -61,7 +61,7 @@
                         </layoutData>
                         
                         <VBox id="workzoneContainer" class="workzone-container">
-                            <Title id="groupTitle" text="Operaciones Centrales" level="H2" titleStyle="H3" class="sapUiSmallMarginBottom sapUiTinyMarginBegin" />
+                            <Title id="groupTitle" text="{i18n>workzone.title}" level="H2" titleStyle="H3" class="sapUiSmallMarginBottom sapUiTinyMarginBegin" />
 
                             <FlexBox 
                                 id="tilesFlexBox"
@@ -73,7 +73,7 @@
                                 <GenericTile
                                     id="domainTile"
                                     header="{domainModel>title}"
-                                    subheader="Funcionalidades"
+                                    subheader="{i18n>workzone.tileSubheader}"
                                     press=".onTilePress"
                                     frameType="OneByOne"
                                     class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
