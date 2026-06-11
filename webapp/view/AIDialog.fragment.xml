@@ -1,0 +1,19 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <Dialog id="aiDialog" title="Asistente IA (Gemini)" contentWidth="450px" contentHeight="500px">
+        <content>
+            <VBox class="sapUiSmallMargin">
+                <TextArea id="aiInput" width="100%" rows="3" placeholder="Preguntale algo al asistente..." />
+                <Button text="Preguntar" type="Emphasized" press=".onCallAI" class="sapUiSmallMarginTopBottom" width="100%" icon="sap-icon://initiative" />
+                
+                <ScrollContainer height="300px" vertical="true" class="sapUiSmallMarginTop">
+                    <Text id="aiResponse" text="Hola, soy tu asistente virtual. ¿En qué te puedo ayudar hoy?" wrapping="true" />
+                </ScrollContainer>
+            </VBox>
+        </content>
+        <beginButton>
+            <Button text="Cerrar" press=".onCloseAIDialog"/>
+        </beginButton>
+    </Dialog>
+</core:FragmentDefinition>

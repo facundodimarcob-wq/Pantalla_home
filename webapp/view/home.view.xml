@@ -14,6 +14,9 @@
                     <ToolbarSpacer id="headerSpacer" />
                     <Button id="btnHome" icon="sap-icon://home" type="Transparent" tooltip="{i18n>tooltip.home}" class="shell-header-btn" />
                     <Button id="btnNotifications" icon="sap-icon://bell" type="Transparent" tooltip="{i18n>tooltip.notifications}" class="shell-header-btn" />
+                    
+                    <Button id="btnAI" icon="sap-icon://initiative" type="Transparent" press=".onOpenAIDialog" tooltip="Asistente IA" class="shell-header-btn" />
+                    
                     <Button id="themeButton" icon="sap-icon://palette" type="Transparent" press=".onThemeMenuPress" tooltip="{i18n>tooltip.theme}" class="shell-header-btn" />
                     <Button id="btnSession" icon="sap-icon://log" type="Transparent" press=".onAvatarPress" tooltip="{i18n>tooltip.session}" class="shell-header-btn" />
                 </Toolbar>

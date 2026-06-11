@@ -1,111 +1,70 @@
 /* ========================================================= */
-/* ESTRUCTURA PRINCIPAL HÍBRIDA (Soporta Modo Oscuro nativo) */
+/* CSS ADAPTATIVO A TEMAS SAP NATIVOS (Fiori 3 y Horizon)    */
 /* ========================================================= */
 
-html, body {
-    height: 100%;
-    margin: 0;
-    overflow: hidden; 
-}
-
-/* Forzar al Launchpad nativo a ocupar 100% */
-.sapMShellAppWidthLimited .sapMShellCentralBox {
-    width: 100% !important;
-    max-width: none !important;
-    margin: 0 !important;
-    left: 0 !important;
-}
+html, body { height: 100%; margin: 0; overflow: hidden; }
 
 .root-container {
     height: 100vh;
     width: 100vw;
+    display: flex;
+    flex-direction: column;
 }
 
-/* --- NUEVA BARRA SUPERIOR (SHELL HEADER) --- */
+/* 1. BARRA SUPERIOR (Se adapta sola al tema) */
 .custom-shell-header {
-    background-color: var(--sapShellColor, #354a5f) !important;
+    background-color: var(--sapShellColor) !important;
     height: 3rem !important;
-    border-bottom: none !important;
-    box-shadow: inset 0 -1px 0 var(--sapShell_BorderColor, rgba(0,0,0,0.1));
+    border-bottom: 1px solid var(--sapShell_BorderColor, transparent) !important;
 }
 
+/* Texto del Header */
 .sap-his-text {
-    color: var(--sapShell_TextColor, #ffffff) !important;
-    font-family: "72", "72full", Arial, Helvetica, sans-serif; /* Tipografía oficial SAP Fiori/BTP */
+    color: var(--sapShell_TextColor) !important;
     font-size: 1.125rem;
-    font-weight: normal;
-    margin-left: 0.5rem;
+    font-weight: bold;
+    margin-left: 10px;
 }
 
-/* Forzamos que los iconos superiores sean claros sobre el fondo oscuro */
+/* Iconos del Header */
 .shell-header-btn .sapUiIcon {
-    color: var(--sapShell_InteractiveTextColor, #ffffff) !important;
+    color: var(--sapShell_InteractiveTextColor) !important;
 }
 
-
-/* --- CONTENIDO PRINCIPAL --- */
+/* 2. LAYOUT PRINCIPAL (El fondo base del sistema) */
 .app-main-layout {
-    background-color: var(--sapBackgroundColor);
-    height: calc(100vh - 3rem); /* Restamos el header para un ajuste perfecto */
+    height: calc(100vh - 3rem);
+    display: flex;
+    width: 100%;
+    background-color: var(--sapBackgroundColor) !important;
 }
 
-/* --- 1. SIDEBAR --- */
+/* 3. SIDEBAR (Menú lateral izquierdo) */
 .sidebar-container {
-    background-color: var(--sapBackgroundColor);
+    width: 280px !important;
+    background-color: var(--sapBackgroundColor) !important;
     border-right: 1px solid var(--sapPageHeader_BorderColor);
     padding: 1rem;
-    height: 100%;
     overflow-y: auto;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.02);
-    z-index: 2;
+    flex-shrink: 0;
 }
 
-.welcome-text {
-    font-size: 12px;
-    color: var(--sapContent_LabelColor);
+/* Limpiar cualquier fondo gris raro en el texto del usuario */
+.welcome-text, .sapMTitle {
+    background-color: transparent !important;
+    color: var(--sapTextColor) !important;
 }
 
-.custom-search-field .sapMSF {
-    border-radius: 8px;
-    background-color: var(--sapField_Background);
-}
-
-.sidebar-list .sapMLIB {
-    border-radius: 8px;
-    margin-bottom: 4px;
-    transition: all 0.2s;
-    background-color: transparent;
-}
-
-.sidebar-list .sapMLIB:hover {
-    background-color: var(--sapList_Hover_Background) !important;
-}
-
-.active-menu-item {
-    background-color: var(--sapSelectedColor) !important; 
-}
-.active-menu-item .sapMText {
-    color: var(--sapActiveColor) !important; 
-    font-weight: bold;
-}
-.active-menu-item .sapUiIcon {
-    color: var(--sapActiveColor) !important; 
-}
-
-/* --- 2. ÁREA PRINCIPAL (MAIN CONTENT) --- */
+/* 4. CONTENIDO (Donde van los Tiles) */
 .main-content-container {
-    background-color: var(--sapBackgroundColor); 
-    height: 100%;
+    flex-grow: 1;
+    background-color: transparent !important; /* Toma el fondo del app-main-layout */
+    padding: 2rem;
     overflow-y: auto;
-    padding: 1rem 2rem;
 }
 
+/* Asegurar que el contenedor de Workzone no rompa anchos */
 .workzone-container {
     width: 100% !important;
-    max-width: none !important; 
-    margin: 0 !important; 
-    background-color: transparent !important; 
-    padding: 1rem 0 !important; 
-    border-radius: 0 !important; 
-    box-shadow: none !important; 
+    background-color: transparent !important;
 }
