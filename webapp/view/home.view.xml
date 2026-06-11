@@ -11,9 +11,7 @@
                 <Toolbar id="shellHeader" class="custom-shell-header">
                     <Image id="sapLogoImage" src="https://upload.wikimedia.org/wikipedia/commons/5/59/SAP_2011_logo.svg" height="28px" class="sapUiTinyMarginBegin sapUiSmallMarginEnd" />
                     <Text id="hisText" text="{i18n>shell.title}" class="sap-his-text" />
-                    
                     <ToolbarSpacer id="headerSpacer" />
-                    
                     <Button id="btnHome" icon="sap-icon://home" type="Transparent" tooltip="{i18n>tooltip.home}" class="shell-header-btn" />
                     <Button id="btnNotifications" icon="sap-icon://bell" type="Transparent" tooltip="{i18n>tooltip.notifications}" class="shell-header-btn" />
                     <Button id="themeButton" icon="sap-icon://palette" type="Transparent" press=".onThemeMenuPress" tooltip="{i18n>tooltip.theme}" class="shell-header-btn" />
@@ -38,21 +36,24 @@
                             </VBox>
                         </HBox>
                         
-                        <SearchField 
-                            id="globalSearchField"
-                            width="100%" 
-                            placeholder="{i18n>sidebar.searchPlaceholder}" 
-                            liveChange=".onSearch" 
-                            class="sapUiSmallMarginBottom custom-search-field" />
+                        <SearchField id="globalSearchField" width="100%" placeholder="{i18n>sidebar.searchPlaceholder}" liveChange=".onSearch" class="sapUiSmallMarginBottom custom-search-field" />
                         
-                        <List id="sidebarList" items="{sideMenu>/items}" class="sidebar-list" showSeparators="None">
-                            <StandardListItem 
-                                id="sidebarListItem"
-                                title="{sideMenu>title}" 
-                                icon="{sideMenu>icon}" 
-                                type="Navigation"
-                                class="{= ${sideMenu>active} ? 'active-menu-item' : '' }" />
-                        </List>
+                        <List id="sidebarList" 
+                        items="{
+                            path: 'sideMenu>/items', 
+                            templateShareable: true 
+                        }" 
+                        class="sidebar-list" 
+                        showSeparators="None" 
+                        itemPress=".onSidebarItemPress">
+                        
+                        <StandardListItem 
+                            id="sidebarItem" 
+                            title="{sideMenu>title}" 
+                            icon="{sideMenu>icon}" 
+                            type="Navigation"
+                            class="{= ${sideMenu>active} ? 'active-menu-item' : '' }" />
+                    </List>
                     </VBox>
 
                     <VBox id="mainContentVBox" class="main-content-container">
@@ -63,29 +64,12 @@
                         <VBox id="workzoneContainer" class="workzone-container">
                             <Title id="groupTitle" text="{i18n>workzone.title}" level="H2" titleStyle="H3" class="sapUiSmallMarginBottom sapUiTinyMarginBegin" />
 
-                            <FlexBox 
-                                id="tilesFlexBox"
-                                wrap="Wrap" 
-                                justifyContent="Start" 
-                                alignItems="Start" 
-                                items="{domainModel>/Tiles}">
-                                
-                                <GenericTile
-                                    id="domainTile"
-                                    header="{domainModel>title}"
-                                    subheader="{i18n>workzone.tileSubheader}"
-                                    press=".onTilePress"
-                                    frameType="OneByOne"
-                                    class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
+                            <FlexBox id="tilesFlexBox" wrap="Wrap" justifyContent="Start" alignItems="Start" items="{domainModel>/Tiles}">
+                                <GenericTile id="domainTile" header="{domainModel>title}" subheader="{i18n>workzone.tileSubheader}" press=".onTilePress" frameType="OneByOne" class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
                                     <TileContent id="domainTileContent">
-                                        <NumericContent
-                                            id="domainNumericContent"
-                                            value="{domainModel>count}"
-                                            icon="{domainModel>icon}" 
-                                            valueColor="Neutral" />
+                                        <NumericContent id="domainNumericContent" value="{domainModel>count}" icon="{domainModel>icon}" valueColor="Neutral" />
                                     </TileContent>
                                 </GenericTile>
-                                
                             </FlexBox>
                         </VBox>
                     </VBox>
